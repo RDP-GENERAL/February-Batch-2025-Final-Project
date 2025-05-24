@@ -1,0 +1,83 @@
+#Database connection details
+import mysql.connector
+
+conn_obj=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="R@jdeep123",
+    database="feb_final_python_2025")
+cur_obj=conn_obj.cursor()
+
+#Define function data_entry_sql
+def data_entry_sql(cust_name,cust_address,cust_ph_no):
+    sql = "INSERT INTO cust_details (c_name, c_address, c_ph_no) VALUES (%s, %s, %s)"
+    data = (cust_name,cust_address,cust_ph_no)
+
+    try:
+        cur_obj.execute(sql, data)
+        print("Customer entry SUCCESSFUL.")
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+
+#Define function data_retrieve
+def data_retrieve(cust_ph_no):
+    query = f"select * from cust_details WHERE c_ph_no={cust_ph_no}"
+
+    try:
+        cur_obj.execute(query)
+        result = cur_obj.fetchone()
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+    return result
+def data_retrieve_from_inventory(p_id):
+    query = f"select * from inventory WHERE p_id={p_id}"
+    #print(query)
+    try:
+        cur_obj.execute(query)
+        result = cur_obj.fetchone()
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+    return result
+def data_entry_analytics_table(c_id,c_name,c_address,total_bill_amount):
+    sql = "INSERT INTO analytics_table (cust_id, cust_name, cust_address, total_bill_amount) VALUES (%s, %s, %s, %s)"
+    data = (c_id,c_name,c_address,total_bill_amount)
+
+    try:
+        cur_obj.execute(sql, data)
+        print("Analytics Table Entry SUCCESSFUL.")
+        conn_obj.commit()
+    except mysql.connector.Error as e:
+        print("Error retrieving data from MySQL:", e)
+        conn_obj.rollback()
+def billing_system(result_from_db):
+    Total_bill_amount=0
+    while True:
+        p_id=input("Please enter product id->")
+        product_details_from_db=data_retrieve_from_inventory(p_id)
+        p_quantity=int(input("Please enter quantity->"))
+        bill_amount=product_details_from_db[2]*p_quantity
+        #print(bill_amount)
+        Total_bill_amount=Total_bill_amount+bill_amount
+        res=input("Enter C or c to continue->").lower()
+        if res!='c':
+            break
+    print("Total bill amount",Total_bill_amount)
+    data_entry_analytics_table(result_from_db[0],result_from_db[1],result_from_db[2],Total_bill_amount)
+#main logic
+cust_ph_no=input("Please enter phone number of customer->")
+result_from_db=data_retrieve(cust_ph_no)
+if result_from_db:
+    billing_system(result_from_db)
+else:
+    cust_name=input("Enter customer name->")
+    cust_address=input("Enter customer address->")
+    data_entry_sql(cust_name,cust_address,cust_ph_no)
+    result_from_db = data_retrieve(cust_ph_no)
+    billing_system(result_from_db)
+conn_obj.close()
