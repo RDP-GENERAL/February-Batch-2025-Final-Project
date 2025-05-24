@@ -1,0 +1,77 @@
+create database feb_final_python_2025;
+use feb_final_python_2025;
+
+CREATE TABLE cust_details (
+    c_id INT AUTO_INCREMENT PRIMARY KEY,
+    c_name VARCHAR(100) NOT NULL,
+    c_address VARCHAR(255) NOT NULL,
+    c_ph_no VARCHAR(15) NOT NULL
+) AUTO_INCREMENT = 1;
+
+select * from cust_details where c_ph_no='8563254285';
+
+INSERT INTO cust_details (c_name, c_address, c_ph_no)
+VALUES ('Sourav Das', 'Kolkata, West Bengal', '9876543211');
+
+truncate table cust_details;
+
+CREATE TABLE inventory (
+    p_id INT AUTO_INCREMENT PRIMARY KEY,
+    p_name VARCHAR(100) NOT NULL,
+    p_price DECIMAL(10,2) NOT NULL,
+    p_stock_in_hand INT NOT NULL
+) AUTO_INCREMENT = 1;
+
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Basmati Rice (1 kg)', 120.00, 50);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Wheat Flour (5 kg)', 240.00, 30);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Toor Dal (1 kg)', 110.00, 40);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Chana Dal (1 kg)', 85.00, 25);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Moong Dal (1 kg)', 95.00, 35);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Sugar (1 kg)', 45.00, 60);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Salt (1 kg)', 20.00, 70);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Sunflower Oil (1 L)', 140.00, 40);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Mustard Oil (1 L)', 130.00, 35);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Milk (1 L)', 55.00, 80);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Bread (400 g)', 40.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Butter (100 g)', 55.00, 25);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Eggs (6 pcs)', 60.00, 30);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Tea Powder (250 g)', 80.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Coffee (200 g)', 130.00, 15);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Potato (1 kg)', 30.00, 50);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Onion (1 kg)', 25.00, 60);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Tomato (1 kg)', 40.00, 45);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Green Chilli (100 g)', 10.00, 25);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Garlic (250 g)', 40.00, 30);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Ginger (250 g)', 30.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Turmeric Powder (100 g)', 28.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Red Chilli Powder (100 g)', 35.00, 25);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Coriander Powder (100 g)', 32.00, 25);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Cumin Seeds (100 g)', 40.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Black Pepper (50 g)', 60.00, 15);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Maggi Noodles (70 g)', 15.00, 50);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Biscuits (200 g)', 25.00, 35);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Toothpaste (150 g)', 90.00, 20);
+INSERT INTO inventory (p_name, p_price, p_stock_in_hand) VALUES ('Soap Bar (100 g)', 25.00, 40);
+
+select * from inventory;
+
+select * from inventory WHERE p_id=3;
+
+CREATE TABLE analytics_table (
+    bill_id INT AUTO_INCREMENT PRIMARY KEY,
+    cust_id INT NOT NULL,
+    cust_name VARCHAR(100) NOT NULL,
+    cust_address VARCHAR(255),
+    total_bill_amount DECIMAL(10,2) NOT NULL,
+    bill_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) AUTO_INCREMENT = 1;
+
+select * from analytics_table;
+
+INSERT INTO analytics_table (cust_id, cust_name, cust_address, total_bill_amount)
+VALUES (101, 'Rajdeep Ghosh', 'Kolkata, West Bengal', 1580.75);
+
+select cust_name,sum(total_bill_amount)
+from analytics_table where cust_id in (select cust_id
+from analytics_table
+group by cust_id) group by cust_name;
