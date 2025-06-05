@@ -1,6 +1,6 @@
 #Database connection details
 import mysql.connector
-
+import QR_CODE_SCANNER
 conn_obj=mysql.connector.connect(
     host="localhost",
     user="root",
@@ -58,7 +58,9 @@ def data_entry_analytics_table(c_id,c_name,c_address,total_bill_amount):
 def billing_system(result_from_db):
     Total_bill_amount=0
     while True:
-        p_id=input("Please enter product id->")
+        #p_id=input("Please enter product id->")
+        product_info=QR_CODE_SCANNER.qr_code_scanner()
+        p_id=int(product_info.split('-')[0])
         product_details_from_db=data_retrieve_from_inventory(p_id)
         p_quantity=int(input("Please enter quantity->"))
         bill_amount=product_details_from_db[2]*p_quantity
